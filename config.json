@@ -1,0 +1,17 @@
+{
+  "volume": 0.7,
+  "enabled": true,
+  "desktop_notifications": true,
+  "character": "mario",
+  "kart_speed": 10,
+  "kart_size": 64,
+  "categories": {
+    "session.start": true,
+    "task.complete": true,
+    "task.error": true,
+    "input.required": true,
+    "resource.limit": true
+  },
+  "suppress_sound_when_tab_focused": false,
+  "notification_dismiss_seconds": 4
+}

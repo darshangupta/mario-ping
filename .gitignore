@@ -1,0 +1,7 @@
+*.mp3
+*.wav
+*.ogg
+.DS_Store
+state.json
+.paused
+/tmp/
