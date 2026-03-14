@@ -10,20 +10,21 @@ TAG="sounds-v1"
 
 mkdir -p "$SOUNDS_DIR"
 
-# Map: category name → release asset filename
-declare -A SOUNDS
-SOUNDS["input.required"]="here-we-go.mp3"
-SOUNDS["task.complete"]="course-clear.mp3"
-SOUNDS["task.error"]="wah.mp3"
-SOUNDS["session.start"]="race-start.mp3"
-SOUNDS["resource.limit"]="blue-shell.mp3"
-
 BASE_URL="https://github.com/${REPO}/releases/download/${TAG}"
+
+# category:filename pairs (bash 3.2 compatible — no associative arrays)
+SOUND_PAIRS="
+input.required:here-we-go.mp3
+task.complete:course-clear.mp3
+task.error:wah.mp3
+session.start:race-start.mp3
+resource.limit:blue-shell.mp3
+"
 
 echo "Downloading Mario Kart sounds..."
 any_downloaded=false
-for category in "${!SOUNDS[@]}"; do
-  filename="${SOUNDS[$category]}"
+while IFS=: read -r category filename; do
+  [ -z "$category" ] && continue
   dest="$SOUNDS_DIR/${category}.mp3"
   if [ -f "$dest" ]; then
     echo "  ✓ ${category} (cached)"
@@ -38,7 +39,9 @@ for category in "${!SOUNDS[@]}"; do
     echo "  ~ ${category} (will use TTS fallback — sounds release not yet published)"
     rm -f "$dest"
   fi
-done
+done <<EOF
+$SOUND_PAIRS
+EOF
 
 if [ "$any_downloaded" = false ]; then
   echo ""
