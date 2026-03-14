@@ -15,6 +15,7 @@ fi
 CONFIG_FILE="$MARIO_DIR/config.json"
 SCRIPTS_DIR="$MARIO_DIR/scripts"
 SOUNDS_DIR="$MARIO_DIR/sounds"
+ASSETS_DIR="$MARIO_DIR/assets"
 
 # --- Platform ---
 detect_platform() {
@@ -76,15 +77,15 @@ get_sound() {
 }
 
 # --- Show kart overlay (async) ---
+# sprite: kart, green-shell, red-shell (default: kart)
 show_kart() {
+  local sprite="${1:-kart}"
   local overlay="$SCRIPTS_DIR/mac-kart-overlay.js"
   [ ! -f "$overlay" ] && return 0
   [ "$PLATFORM" != "mac" ] && return 0
-  local character
-  character=$(get_config "character" "mario")
   local signal="/tmp/mario-ping-kart-signal-$$"
   touch "$signal"
-  osascript -l JavaScript "$overlay" "$character" "$signal" "input.required" &>/dev/null &
+  osascript -l JavaScript "$overlay" "$sprite" "$signal" "$ASSETS_DIR" &>/dev/null &
   echo "$!" > "/tmp/mario-ping-kart-pid"
   echo "$signal" > "/tmp/mario-ping-kart-signal-path"
 }
@@ -137,11 +138,11 @@ if [ "${1:-}" != "" ]; then
       if [ "$PLATFORM" = "mac" ]; then
         overlay="$SCRIPTS_DIR/mac-kart-overlay.js"
         if [ -f "$overlay" ]; then
-          character=$(get_config "character" "mario")
+          sprite=$(get_config "sprite" "kart")
           signal="/tmp/mario-ping-test-$$"
           touch "$signal"
-          echo "  Showing kart animation for 4 seconds..."
-          osascript -l JavaScript "$overlay" "$character" "$signal" "test" &>/dev/null &
+          echo "  Showing $sprite animation for 4 seconds..."
+          osascript -l JavaScript "$overlay" "$sprite" "$signal" "$ASSETS_DIR" &>/dev/null &
           sleep 4
           rm -f "$signal"
           echo "  Done."
@@ -196,7 +197,7 @@ case "$EVENT" in
     else
       say_fallback "Here we go"
     fi
-    show_kart
+    show_kart "$(get_config 'sprite' 'kart')"
     ;;
   task.complete)
     dismiss_kart

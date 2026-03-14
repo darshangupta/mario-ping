@@ -11,13 +11,14 @@ echo "🏎  mario-ping installer"
 echo ""
 
 # Create hooks directory
-mkdir -p "$HOOKS_DIR/scripts" "$HOOKS_DIR/sounds"
+mkdir -p "$HOOKS_DIR/scripts" "$HOOKS_DIR/sounds" "$HOOKS_DIR/assets"
 
 # Copy core files
 echo "Installing to $HOOKS_DIR ..."
 cp "$SCRIPT_DIR/mario.sh" "$HOOKS_DIR/"
 cp "$SCRIPT_DIR/scripts/mac-kart-overlay.js" "$HOOKS_DIR/scripts/"
 cp "$SCRIPT_DIR/scripts/pack-download.sh" "$HOOKS_DIR/scripts/"
+cp "$SCRIPT_DIR/assets/"*.png "$HOOKS_DIR/assets/"
 chmod +x "$HOOKS_DIR/mario.sh" "$HOOKS_DIR/scripts/pack-download.sh"
 
 # Copy config only if not already present (preserve user customizations)

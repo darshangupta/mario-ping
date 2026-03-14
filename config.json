@@ -3,8 +3,8 @@
   "enabled": true,
   "desktop_notifications": true,
   "character": "mario",
+  "sprite": "kart",
   "kart_speed": 10,
-  "kart_size": 64,
   "categories": {
     "session.start": true,
     "task.complete": true,
